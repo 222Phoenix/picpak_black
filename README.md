@@ -7,19 +7,17 @@ Generates a 400×300 PNG for a PicPak frame.
 Every day the GitHub Action:
 
 1. Gets Alameda, California hourly weather from the National Weather Service API.
-2. Creates morning/noon/night rows with three small weather icons.
-3. Alternates between a fun fact and a motivational quote.
+2. Creates morning/noon/night rows with weather icons.
+3. Alternates between a daily trivia question with its answer and a motivational quote.
 4. Saves the result as `docs/weather.png`.
 5. Commits the updated image so GitHub Pages can publish it.
 
-## Alternation
+## Daily content
 
-The calendar day controls the type:
+- Even-numbered days: trivia question and answer.
+- Odd-numbered days: motivational quote.
 
-- Even-numbered day: fun fact
-- Odd-numbered day: motivational quote
-
-The content index rotates by date so the same item isn't selected every day.
+The trivia pool currently contains 50 Q&A entries. The selected entry rotates by date through the collection.
 
 ## GitHub Pages
 
@@ -29,13 +27,13 @@ In the repository settings, enable Pages using:
 
 The image will then be available at:
 
-`https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/weather.png`
+`https://222phoenix.github.io/picpak_black/weather.png`
 
 That URL is suitable for PicPak's `push_image` once the repository is public and Pages is active.
 
 ## Important
 
-The workflow currently generates and publishes the image, but it does **not** automatically push it into PicPak. PicPak's ChatGPT tool accepts a public image URL, but a standalone PicPak API endpoint/credential suitable for GitHub Actions has not been established.
+The workflow generates and publishes the image, but does **not** automatically push it into PicPak. PicPak's ChatGPT tool accepts a public image URL, but a standalone PicPak API endpoint/credential suitable for GitHub Actions has not been established.
 
 ## Local test
 
