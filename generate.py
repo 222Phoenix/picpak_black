@@ -3,8 +3,8 @@
 Generate a 400x300 PicPak weather card for Alameda, CA.
 
 Uses the U.S. National Weather Service API (no API key required).
-Alternates between a fun fact and a motivational quote based on the
-calendar day: even day = fun fact, odd day = quote.
+Cycles through a quote, fun fact, and kid-friendly joke based on the
+calendar day. The bottom section shows one item at a time.
 """
 
 import json
@@ -76,9 +76,10 @@ def load_content():
     data = json.loads((ROOT / "data" / "content.json").read_text())
     from zoneinfo import ZoneInfo
     today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
-    mode = "trivia" if today.day % 2 == 0 else "quote"
+    modes = ["quote", "trivia", "joke"]
+    mode = modes[today.toordinal() % len(modes)]
     items = data[mode]
-    # Deterministic daily rotation through the full collection, using Alameda's date.
+    # Deterministic rotation through the selected collection, using Alameda's date.
     index = today.toordinal() % len(items)
     return mode, items[index]
 
@@ -169,7 +170,7 @@ def draw_card(forecast, mode, content):
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
-    heading = "DAILY TRIVIA" if mode == "trivia" else "MOTIVATION"
+    heading = {"trivia": "DAILY FACT", "quote": "QUOTE", "joke": "JOKE"}[mode]
     hf = fit_text(d, heading, 300, 19, True, 15)
     hb = d.textbbox((0, 0), heading, font=hf)
     d.text(((W-(hb[2]-hb[0]))/2 + 12, 225), heading, fill=RED, font=hf)
@@ -179,6 +180,16 @@ def draw_card(forecast, mode, content):
         answer = content["answer"]
         qf = fit_text(d, question, 372, 16, True, 11)
         af = fit_text(d, answer, 372, 14, False, 10)
+        def centered_line(text, f, y):
+            b = d.textbbox((0, 0), text, font=f)
+            d.text(((W-(b[2]-b[0]))/2 + 12, y), text, fill=BLACK, font=f)
+        centered_line(question, qf, 249)
+        centered_line(answer, af, 276)
+    elif mode == "joke":
+        question = content["text"]
+        answer = content["answer"]
+        qf = fit_text(d, question, 372, 16, True, 11)
+        af = fit_text(d, answer, 372, 15, True, 10)
         def centered_line(text, f, y):
             b = d.textbbox((0, 0), text, font=f)
             d.text(((W-(b[2]-b[0]))/2 + 12, y), text, fill=BLACK, font=f)
