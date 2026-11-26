@@ -2,9 +2,9 @@ name: Daily PicPak Weather
 
 on:
   schedule:
-    # 7:00 AM Pacific during standard time; GitHub cron is UTC.
-    # Change this to 14:00 UTC during daylight saving time.
-    - cron: "0 15 * * *"
+    # GitHub cron is UTC. Run at both possible Pacific-midnight times;
+    # the local-time guard below allows only the one that is midnight.
+    - cron: "5 7,8 * * *"
   workflow_dispatch:
 
 permissions:
@@ -17,18 +17,31 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check for Pacific midnight
+        id: localtime
+        run: |
+          if [ "$(TZ=America/Los_Angeles date +%H)" = "00" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python
+        if: steps.localtime.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Install Pillow
+        if: steps.localtime.outputs.run == 'true'
         run: pip install Pillow
 
       - name: Generate today's card
+        if: steps.localtime.outputs.run == 'true'
         run: python generate.py
 
       - name: Publish image
+        if: steps.localtime.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
