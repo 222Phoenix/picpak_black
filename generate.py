@@ -172,7 +172,7 @@ def draw_card(forecast, mode, content):
     heading = "DAILY TRIVIA" if mode == "trivia" else "MOTIVATION"
     hf = fit_text(d, heading, 300, 19, True, 15)
     hb = d.textbbox((0, 0), heading, font=hf)
-    d.text(((W-(hb[2]-hb[0]))/2, 225), heading, fill=RED, font=hf)
+    d.text(((W-(hb[2]-hb[0]))/2 + 12, 225), heading, fill=RED, font=hf)
 
     if mode == "trivia":
         question = content["question"]
@@ -181,7 +181,7 @@ def draw_card(forecast, mode, content):
         af = fit_text(d, answer, 372, 14, False, 10)
         def centered_line(text, f, y):
             b = d.textbbox((0, 0), text, font=f)
-            d.text(((W-(b[2]-b[0]))/2, y), text, fill=BLACK, font=f)
+            d.text(((W-(b[2]-b[0]))/2 + 12, y), text, fill=BLACK, font=f)
         centered_line(question, qf, 249)
         centered_line(answer, af, 276)
     else:
@@ -202,11 +202,11 @@ def draw_card(forecast, mode, content):
             lines.append(line)
         for i, line in enumerate(lines[:2]):
             b = d.textbbox((0, 0), line, font=qf)
-            d.text(((W-(b[2]-b[0]))/2, 250+i*19), line, fill=BLACK, font=qf)
+            d.text(((W-(b[2]-b[0]))/2 + 12, 250+i*19), line, fill=BLACK, font=qf)
         if author:
             af = fit_text(d, f"— {author}", 250, 11, True, 9)
             b = d.textbbox((0, 0), f"— {author}", font=af)
-            d.text(((W-(b[2]-b[0]))/2, 285), f"— {author}", fill=BLACK, font=af)
+            d.text(((W-(b[2]-b[0]))/2 + 12, 285), f"— {author}", fill=BLACK, font=af)
 
     return img
 
