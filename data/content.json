@@ -41,7 +41,7 @@
       "author": "Mark Twain"
     },
     {
-      "text": "It always seems impossible until it\u2019s done.",
+      "text": "It always seems impossible until it’s done.",
       "author": "Nelson Mandela"
     },
     {
@@ -57,12 +57,214 @@
       "author": "Arthur Ashe"
     },
     {
-      "text": "Believe you can and you\u2019re halfway there.",
+      "text": "Believe you can and you’re halfway there.",
       "author": "Theodore Roosevelt"
     },
     {
       "text": "Act as if what you do makes a difference. It does.",
       "author": "William James"
+    }
+  ],
+  "trivia": [
+    {
+      "question": "How many hearts does an octopus have?",
+      "answer": "Three."
+    },
+    {
+      "question": "Which planet has the longest day?",
+      "answer": "Venus; one rotation takes about 243 Earth days."
+    },
+    {
+      "question": "What is the largest ocean on Earth?",
+      "answer": "The Pacific Ocean."
+    },
+    {
+      "question": "Which mammal lays eggs?",
+      "answer": "The platypus and echidnas."
+    },
+    {
+      "question": "What is the chemical symbol for gold?",
+      "answer": "Au."
+    },
+    {
+      "question": "How many bones are in an adult human body?",
+      "answer": "Usually 206."
+    },
+    {
+      "question": "Which gas do plants absorb during photosynthesis?",
+      "answer": "Carbon dioxide."
+    },
+    {
+      "question": "What is the hardest natural substance?",
+      "answer": "Diamond."
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "answer": "Mars."
+    },
+    {
+      "question": "What is the largest organ of the human body?",
+      "answer": "The skin."
+    },
+    {
+      "question": "How many sides does a hexagon have?",
+      "answer": "Six."
+    },
+    {
+      "question": "What is the closest star to Earth?",
+      "answer": "The Sun."
+    },
+    {
+      "question": "Which animal is the tallest in the world?",
+      "answer": "The giraffe."
+    },
+    {
+      "question": "What is the smallest prime number?",
+      "answer": "Two."
+    },
+    {
+      "question": "Which ocean is the deepest?",
+      "answer": "The Pacific, home to the Mariana Trench."
+    },
+    {
+      "question": "What is the main gas in Earth's atmosphere?",
+      "answer": "Nitrogen, about 78%."
+    },
+    {
+      "question": "Which bird can fly backward?",
+      "answer": "The hummingbird."
+    },
+    {
+      "question": "What is the largest living animal?",
+      "answer": "The blue whale."
+    },
+    {
+      "question": "Which country gifted the Statue of Liberty to the United States?",
+      "answer": "France."
+    },
+    {
+      "question": "How many chambers does a human heart have?",
+      "answer": "Four."
+    },
+    {
+      "question": "What is the freezing point of water in Celsius?",
+      "answer": "Zero degrees Celsius."
+    },
+    {
+      "question": "Which planet has the most prominent ring system?",
+      "answer": "Saturn."
+    },
+    {
+      "question": "What is the fastest land animal?",
+      "answer": "The cheetah."
+    },
+    {
+      "question": "Which part of a plant usually absorbs water?",
+      "answer": "The roots."
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "answer": "Tokyo."
+    },
+    {
+      "question": "How many colors are traditionally named in a rainbow?",
+      "answer": "Seven."
+    },
+    {
+      "question": "Which metal is liquid at ordinary room temperature?",
+      "answer": "Mercury."
+    },
+    {
+      "question": "What is the largest hot desert?",
+      "answer": "The Sahara."
+    },
+    {
+      "question": "Which animal is famous for changing color?",
+      "answer": "The chameleon."
+    },
+    {
+      "question": "What is the study of earthquakes called?",
+      "answer": "Seismology."
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "answer": "Mercury."
+    },
+    {
+      "question": "What is the largest internal organ in the human body?",
+      "answer": "The liver."
+    },
+    {
+      "question": "How many teeth does a typical adult human have?",
+      "answer": "32, including wisdom teeth."
+    },
+    {
+      "question": "Which blood cells help fight infection?",
+      "answer": "White blood cells."
+    },
+    {
+      "question": "What is the process called when liquid water becomes vapor?",
+      "answer": "Evaporation."
+    },
+    {
+      "question": "Which continent has the most countries?",
+      "answer": "Africa."
+    },
+    {
+      "question": "What is the largest island in the world?",
+      "answer": "Greenland."
+    },
+    {
+      "question": "Which instrument measures atmospheric pressure?",
+      "answer": "A barometer."
+    },
+    {
+      "question": "What is the center of an atom called?",
+      "answer": "The nucleus."
+    },
+    {
+      "question": "Which animal has black skin beneath its white fur?",
+      "answer": "The polar bear."
+    },
+    {
+      "question": "What is the name of our galaxy?",
+      "answer": "The Milky Way."
+    },
+    {
+      "question": "Which vitamin can the body make with sunlight exposure?",
+      "answer": "Vitamin D."
+    },
+    {
+      "question": "How many legs does an insect have?",
+      "answer": "Six."
+    },
+    {
+      "question": "What is the largest species of penguin?",
+      "answer": "The emperor penguin."
+    },
+    {
+      "question": "Which natural material do bees make from nectar?",
+      "answer": "Honey."
+    },
+    {
+      "question": "What is the unit of electrical resistance?",
+      "answer": "The ohm."
+    },
+    {
+      "question": "Which planet is famous for its Great Red Spot?",
+      "answer": "Jupiter."
+    },
+    {
+      "question": "What is the smallest continent by land area?",
+      "answer": "Australia."
+    },
+    {
+      "question": "Which animal is known for cube-shaped droppings?",
+      "answer": "The wombat."
+    },
+    {
+      "question": "What do you call an animal that eats both plants and animals?",
+      "answer": "An omnivore."
     }
   ]
 }
