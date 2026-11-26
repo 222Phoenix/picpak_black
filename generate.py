@@ -36,57 +36,38 @@ def get_json(url):
 
 
 def nws_forecast():
+    from zoneinfo import ZoneInfo
+
     point = get_json(f"https://api.weather.gov/points/{LAT},{LON}")
-    props = point["properties"]
-    forecast_url = props["forecastHourly"]
+    forecast_url = point["properties"]["forecastHourly"]
     hourly = get_json(forecast_url)["properties"]["periods"]
 
-    # Pick the nearest periods to morning/noon/night in local Pacific time.
+    # Use the closest NWS hourly forecast to 8 AM, noon, and 9 PM
+    # in Alameda local time. Do not require an arbitrary +/-2 hour window;
+    # that can cause the same hourly period to be reused for multiple rows.
+    pacific = ZoneInfo("America/Los_Angeles")
+    today = datetime.now(pacific).date()
     wanted = {"morning": 8, "noon": 12, "night": 21}
     result = {}
 
-    for period in hourly:
-        dt = datetime.fromisoformat(period["startTime"].replace("Z", "+00:00"))
-        local_hour = int(dt.astimezone().strftime("%H"))
-        # GitHub runner is UTC, so use the actual Pacific timezone explicitly.
-        from zoneinfo import ZoneInfo
-        local_hour = int(dt.astimezone(ZoneInfo("America/Los_Angeles")).strftime("%H"))
-        date_key = dt.astimezone(ZoneInfo("America/Los_Angeles")).date()
-
-        today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
-        if date_key != today:
-            continue
-
-        for name, target in wanted.items():
-            if name not in result and abs(local_hour - target) <= 2:
-                result[name] = {
-                    "temp": period["temperature"],
-                    "unit": period["temperatureUnit"],
-                    "short": period["shortForecast"],
-                    "isDaytime": period["isDaytime"],
-                }
-
-    # Fill any missing period from nearest same-day hourly period.
-    today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
     candidates = []
     for period in hourly:
         dt = datetime.fromisoformat(period["startTime"].replace("Z", "+00:00"))
-        local = dt.astimezone(ZoneInfo("America/Los_Angeles"))
+        local = dt.astimezone(pacific)
         if local.date() == today:
-            candidates.append((local.hour, period))
+            candidates.append((local.hour + local.minute / 60, period))
+
+    if not candidates:
+        raise RuntimeError("NWS hourly forecast contains no periods for today")
 
     for name, target in wanted.items():
-        if name not in result and candidates:
-            _, p = min(candidates, key=lambda x: abs(x[0] - target))
-            result[name] = {
-                "temp": p["temperature"],
-                "unit": p["temperatureUnit"],
-                "short": p["shortForecast"],
-                "isDaytime": p["isDaytime"],
-            }
-
-    if len(result) != 3:
-        raise RuntimeError(f"Could not obtain all three forecast periods: {result}")
+        _, period = min(candidates, key=lambda x: abs(x[0] - target))
+        result[name] = {
+            "temp": period["temperature"],
+            "unit": period["temperatureUnit"],
+            "short": period["shortForecast"],
+            "isDaytime": period["isDaytime"],
+        }
 
     return result
 
