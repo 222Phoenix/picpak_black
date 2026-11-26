@@ -1,0 +1,37 @@
+name: Daily PicPak Weather
+
+on:
+  schedule:
+    # 7:00 AM Pacific during standard time; GitHub cron is UTC.
+    # Change this to 14:00 UTC during daylight saving time.
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: pip install Pillow
+
+      - name: Generate today's card
+        run: python generate.py
+
+      - name: Publish image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/weather.png
+          git diff --cached --quiet || git commit -m "Update daily weather card"
+          git push
