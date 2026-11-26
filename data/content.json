@@ -234,5 +234,67 @@
       "question": "What do you call an animal that eats both plants and animals?",
       "answer": "An omnivore."
     }
+  ],
+  "joke": [
+    {
+      "text": "Why did the math book look sad?",
+      "answer": "Because it had too many problems!"
+    },
+    {
+      "text": "What do you call a bear with no teeth?",
+      "answer": "A gummy bear!"
+    },
+    {
+      "text": "Why did the bicycle fall over?",
+      "answer": "Because it was two-tired!"
+    },
+    {
+      "text": "What do clouds wear under their clothes?",
+      "answer": "Thunderwear!"
+    },
+    {
+      "text": "Why did the computer go to the doctor?",
+      "answer": "It had a virus!"
+    },
+    {
+      "text": "What kind of tree fits in your hand?",
+      "answer": "A palm tree!"
+    },
+    {
+      "text": "Why was the broom late?",
+      "answer": "It swept in!"
+    },
+    {
+      "text": "What do you call cheese that isn't yours?",
+      "answer": "Nacho cheese!"
+    },
+    {
+      "text": "Why did the cookie go to the doctor?",
+      "answer": "Because it felt crummy!"
+    },
+    {
+      "text": "What has ears but cannot hear?",
+      "answer": "A field of corn!"
+    },
+    {
+      "text": "Why did the tomato turn red?",
+      "answer": "Because it saw the salad dressing!"
+    },
+    {
+      "text": "What do you call a sleeping bull?",
+      "answer": "A bulldozer!"
+    },
+    {
+      "text": "Why don't eggs tell jokes?",
+      "answer": "They might crack each other up!"
+    },
+    {
+      "text": "What did one wall say to the other wall?",
+      "answer": "I'll meet you at the corner!"
+    },
+    {
+      "text": "Why did the student eat their homework?",
+      "answer": "The teacher said it was a piece of cake!"
+    }
   ]
 }
