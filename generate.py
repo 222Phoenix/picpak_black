@@ -93,11 +93,12 @@ def nws_forecast():
 
 def load_content():
     data = json.loads((ROOT / "data" / "content.json").read_text())
-    day = datetime.now().day
-    mode = "trivia" if day % 2 == 0 else "quote"
+    from zoneinfo import ZoneInfo
+    today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
+    mode = "trivia" if today.day % 2 == 0 else "quote"
     items = data[mode]
-    # Deterministic daily rotation through the full collection.
-    index = datetime.now().date().toordinal() % len(items)
+    # Deterministic daily rotation through the full collection, using Alameda's date.
+    index = today.toordinal() % len(items)
     return mode, items[index]
 
 
@@ -163,7 +164,8 @@ def draw_card(forecast, mode, content):
     d = ImageDraw.Draw(img)
 
     # Header
-    now = datetime.now()
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/Los_Angeles"))
     date_text = now.strftime("%A %m/%d/%y")
     f = fit_text(d, date_text, 370, 31, True, 22)
     box = d.textbbox((0, 0), date_text, font=f)
