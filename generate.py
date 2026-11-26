@@ -160,12 +160,12 @@ def draw_card(forecast, mode, content):
 
         lf = font(20, True)
         sf = fit_text(d, p["short"], 175, 13, False, 10)
-        d.text((68, y), f"{label}:", fill=BLACK, font=lf)
+        d.text((82, y), f"{label}:", fill=BLACK, font=lf)
         d.text((68, y+23), p["short"], fill=BLACK, font=sf)
 
         tf = fit_text(d, f'{p["temp"]}°{p["unit"]}', 90, 28, True, 20)
         tb = d.textbbox((0, 0), f'{p["temp"]}°{p["unit"]}', font=tf)
-        d.text((392-(tb[2]-tb[0]), y+5), f'{p["temp"]}°{p["unit"]}', fill=BLACK, font=tf)
+        d.text((380-(tb[2]-tb[0]), y+5), f'{p["temp"]}°{p["unit"]}', fill=BLACK, font=tf)
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
