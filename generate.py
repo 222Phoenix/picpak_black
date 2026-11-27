@@ -185,42 +185,63 @@ def draw_card(forecast, mode, content):
         if content.get("author"):
             parts.append(f'— {content["author"]}')
 
+    # Wrap each joke/question/answer independently and shrink the font as needed.
+    # This keeps long answers inside the 400px card instead of clipping at the edges.
+    def wrap_part(text, face, max_width):
+        words = str(text).replace("\\n", " ").split()
+        wrapped = []
+        line = ""
+        for word in words:
+            trial = (line + " " + word).strip()
+            if d.textlength(trial, font=face) <= max_width:
+                line = trial
+                continue
+            if line:
+                wrapped.append(line)
+                line = ""
+            # Split a single overlong token rather than letting it overflow.
+            piece = ""
+            for char in word:
+                candidate = piece + char
+                if piece and d.textlength(candidate, font=face) > max_width:
+                    wrapped.append(piece)
+                    piece = char
+                else:
+                    piece = candidate
+            line = piece
+        if line:
+            wrapped.append(line)
+        return wrapped
+
+    available_top, available_bottom = 248, 297
+    max_width = 372
     body_font = font(13, True)
     lines = []
-    for part in parts:
-        line = ""
-        for word in str(part).split():
-            trial = (line + " " + word).strip()
-            if d.textbbox((0, 0), trial, font=body_font)[2] <= 372:
-                line = trial
-            else:
-                if line:
-                    lines.append(line)
-                line = word
-        if line:
-            lines.append(line)
-
-    # Keep the same line spacing and alignment for motivation, facts, and jokes.
-    if len(lines) > 3:
-        body_font = fit_text(d, " ".join(lines), 372, 13, True, 10)
+    for size in range(13, 8, -1):
+        candidate_font = font(size, True)
+        candidate_lines = []
+        for part in parts:
+            candidate_lines.extend(wrap_part(part, candidate_font, max_width))
+        line_height = size + 2
+        if len(candidate_lines) * line_height <= available_bottom - available_top:
+            body_font = candidate_font
+            lines = candidate_lines
+            break
+    if not lines:
+        body_font = font(9, True)
         lines = []
-        combined = " ".join(parts)
-        line = ""
-        for word in combined.split():
-            trial = (line + " " + word).strip()
-            if d.textbbox((0, 0), trial, font=body_font)[2] <= 372:
-                line = trial
-            else:
-                if line:
-                    lines.append(line)
-                line = word
-        if line:
-            lines.append(line)
+        for part in parts:
+            lines.extend(wrap_part(part, body_font, max_width))
 
-    line_height = 15
-    for i, line in enumerate(lines[:3]):
-        b = d.textbbox((0, 0), line, font=body_font)
-        d.text(((W-(b[2]-b[0]))/2, 250+i*line_height), line, fill=BLACK, font=body_font)
+    line_height = body_font.size + 2
+    total_height = len(lines) * line_height
+    y = available_top + max(0, (available_bottom - available_top - total_height) // 2)
+    for line in lines:
+        bbox = d.textbbox((0, 0), line, font=body_font)
+        text_width = d.textlength(line, font=body_font)
+        x = (W - text_width) / 2
+        d.text((x, y), line, fill=BLACK, font=body_font)
+        y += line_height
 
     return img
 
