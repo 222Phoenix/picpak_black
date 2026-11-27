@@ -170,40 +170,28 @@ def draw_card(forecast, mode, content):
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
-    heading = {"trivia": "DAILY FACT", "quote": "QUOTE", "joke": "JOKE"}[mode]
-    hf = fit_text(d, heading, 300, 19, True, 15)
+    heading = {"trivia": "Fun Fact:", "quote": "Motivation:", "joke": "Joke:"}[mode]
+    hf = fit_text(d, heading, 372, 19, True, 15)
     hb = d.textbbox((0, 0), heading, font=hf)
-    d.text(((W-(hb[2]-hb[0]))/2 + 12, 225), heading, fill=RED, font=hf)
+    d.text(((W-(hb[2]-hb[0]))/2, 225), heading, fill=RED, font=hf)
 
+    # All content types share the same centered body layout and typography.
     if mode == "trivia":
-        question = content["question"]
-        answer = content["answer"]
-        qf = fit_text(d, question, 372, 16, True, 11)
-        af = fit_text(d, answer, 372, 14, False, 10)
-        def centered_line(text, f, y):
-            b = d.textbbox((0, 0), text, font=f)
-            d.text(((W-(b[2]-b[0]))/2 + 12, y), text, fill=BLACK, font=f)
-        centered_line(question, qf, 249)
-        centered_line(answer, af, 276)
+        parts = [content["question"], content["answer"]]
     elif mode == "joke":
-        question = content["text"]
-        answer = content["answer"]
-        qf = fit_text(d, question, 372, 16, True, 11)
-        af = fit_text(d, answer, 372, 15, True, 10)
-        def centered_line(text, f, y):
-            b = d.textbbox((0, 0), text, font=f)
-            d.text(((W-(b[2]-b[0]))/2 + 12, y), text, fill=BLACK, font=f)
-        centered_line(question, qf, 249)
-        centered_line(answer, af, 276)
+        parts = [content["text"], content["answer"]]
     else:
-        text = f'“{content["text"]}”'
-        author = content.get("author")
-        qf = fit_text(d, text, 372, 16, True, 11)
-        words = text.split()
-        lines, line = [], ""
-        for word in words:
+        parts = [content["text"]]
+        if content.get("author"):
+            parts.append(f'— {content["author"]}')
+
+    body_font = font(13, True)
+    lines = []
+    for part in parts:
+        line = ""
+        for word in str(part).split():
             trial = (line + " " + word).strip()
-            if d.textbbox((0, 0), trial, font=qf)[2] <= 372:
+            if d.textbbox((0, 0), trial, font=body_font)[2] <= 372:
                 line = trial
             else:
                 if line:
@@ -211,13 +199,28 @@ def draw_card(forecast, mode, content):
                 line = word
         if line:
             lines.append(line)
-        for i, line in enumerate(lines[:2]):
-            b = d.textbbox((0, 0), line, font=qf)
-            d.text(((W-(b[2]-b[0]))/2 + 12, 250+i*19), line, fill=BLACK, font=qf)
-        if author:
-            af = fit_text(d, f"— {author}", 250, 11, True, 9)
-            b = d.textbbox((0, 0), f"— {author}", font=af)
-            d.text(((W-(b[2]-b[0]))/2 + 12, 285), f"— {author}", fill=BLACK, font=af)
+
+    # Keep the same line spacing and alignment for motivation, facts, and jokes.
+    if len(lines) > 3:
+        body_font = fit_text(d, " ".join(lines), 372, 13, True, 10)
+        lines = []
+        combined = " ".join(parts)
+        line = ""
+        for word in combined.split():
+            trial = (line + " " + word).strip()
+            if d.textbbox((0, 0), trial, font=body_font)[2] <= 372:
+                line = trial
+            else:
+                if line:
+                    lines.append(line)
+                line = word
+        if line:
+            lines.append(line)
+
+    line_height = 15
+    for i, line in enumerate(lines[:3]):
+        b = d.textbbox((0, 0), line, font=body_font)
+        d.text(((W-(b[2]-b[0]))/2, 250+i*line_height), line, fill=BLACK, font=body_font)
 
     return img
 
