@@ -154,20 +154,49 @@ def draw_card(forecast, mode, content):
     d.text(((W-(box[2]-box[0]))/2, 8), date_text, fill=BLACK, font=f)
     d.line((8, 54, 392, 54), fill=BLACK, width=3)
 
-    rows = [("Morning", "morning", 72), ("Noon", "noon", 123), ("Night", "night", 174)]
-    for label, key, y in rows:
+    # Three equal vertical forecast cards beneath the date header.
+    columns = [
+        ("Morning", "morning", 8, 128),
+        ("Noon", "noon", 136, 264),
+        ("Night", "night", 272, 392),
+    ]
+    for label, key, left, right in columns:
         p = forecast[key]
-        # Shift the icon inward and the temperature column toward center.
-        weather_icon(d, 52, y+14, icon_kind(key, p["short"]), 0.65)
+        cx = (left + right) // 2
+        d.rounded_rectangle((left, 62, right, 216), radius=7, outline=BLACK, width=2)
 
-        lf = font(20, True)
-        sf = fit_text(d, p["short"], 175, 13, False, 10)
-        d.text((108, y), f"{label}:", fill=BLACK, font=lf)
-        d.text((80, y+23), p["short"], fill=BLACK, font=sf)
+        # Period label
+        lf = fit_text(d, label.upper(), right-left-12, 15, True, 11)
+        lb = d.textbbox((0, 0), label.upper(), font=lf)
+        d.text((cx-(lb[2]-lb[0])/2, 68), label.upper(), fill=BLACK, font=lf)
 
-        tf = fit_text(d, f'{p["temp"]}°{p["unit"]}', 90, 28, True, 20)
-        tb = d.textbbox((0, 0), f'{p["temp"]}°{p["unit"]}', font=tf)
-        d.text((345-(tb[2]-tb[0]), y+5), f'{p["temp"]}°{p["unit"]}', fill=BLACK, font=tf)
+        # Weather icon centered in its own column
+        weather_icon(d, cx, 116, icon_kind(key, p["short"]), 0.82)
+
+        # Prominent centered temperature
+        temp_text = f'{p["temp"]}°{p["unit"]}'
+        tf = fit_text(d, temp_text, right-left-12, 25, True, 17)
+        tb = d.textbbox((0, 0), temp_text, font=tf)
+        d.text((cx-(tb[2]-tb[0])/2, 148), temp_text, fill=BLACK, font=tf)
+
+        # Center and wrap the condition within the card width.
+        sf = fit_text(d, p["short"], right-left-14, 11, False, 9)
+        words = p["short"].split()
+        desc_lines = []
+        line = ""
+        for word in words:
+            trial = (line + " " + word).strip()
+            if d.textlength(trial, font=sf) <= right-left-14:
+                line = trial
+            else:
+                if line:
+                    desc_lines.append(line)
+                line = word
+        if line:
+            desc_lines.append(line)
+        for i, desc in enumerate(desc_lines[:2]):
+            dw = d.textlength(desc, font=sf)
+            d.text((cx-dw/2, 181+i*13), desc, fill=BLACK, font=sf)
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
