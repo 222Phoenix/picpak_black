@@ -166,9 +166,9 @@ def draw_card(forecast, mode, content):
         d.rounded_rectangle((left, 62, right, 216), radius=7, outline=BLACK, width=2)
 
         # Period label
-        lf = fit_text(d, label.upper(), right-left-12, 15, True, 11)
-        lb = d.textbbox((0, 0), label.upper(), font=lf)
-        d.text((cx-(lb[2]-lb[0])/2, 68), label.upper(), fill=BLACK, font=lf)
+        lf = fit_text(d, label, right-left-12, 15, True, 11)
+        lb = d.textbbox((0, 0), label, font=lf)
+        d.text((cx-(lb[2]-lb[0])/2, 68), label, fill=BLACK, font=lf)
 
         # Weather icon centered in its own column
         weather_icon(d, cx, 116, icon_kind(key, p["short"]), 0.82)
@@ -200,11 +200,6 @@ def draw_card(forecast, mode, content):
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
-    heading = {"trivia": "Fun Fact:", "quote": "Motivation:", "joke": "Joke:"}[mode]
-    hf = fit_text(d, heading, 372, 19, True, 15)
-    hb = d.textbbox((0, 0), heading, font=hf)
-    d.text(((W-(hb[2]-hb[0]))/2, 225), heading, fill=RED, font=hf)
-
     # All content types share the same centered body layout and typography.
     if mode == "trivia":
         parts = [content["question"], content["answer"]]
@@ -215,8 +210,8 @@ def draw_card(forecast, mode, content):
         if content.get("author"):
             parts.append(f'— {content["author"]}')
 
-    # Wrap each joke/question/answer independently and shrink the font as needed.
-    # This keeps long answers inside the 400px card instead of clipping at the edges.
+    # Wrap each joke/question/answer independently and use the largest font
+    # that fits in the available bottom area.
     def wrap_part(text, face, max_width):
         words = str(text).replace("\\n", " ").split()
         wrapped = []
@@ -243,31 +238,30 @@ def draw_card(forecast, mode, content):
             wrapped.append(line)
         return wrapped
 
-    available_top, available_bottom = 248, 297
+    available_top, available_bottom = 228, 297
     max_width = 372
-    body_font = font(13, True)
+    body_font = font(20, True)
     lines = []
-    for size in range(13, 8, -1):
+    for size in range(20, 9, -1):
         candidate_font = font(size, True)
         candidate_lines = []
         for part in parts:
             candidate_lines.extend(wrap_part(part, candidate_font, max_width))
-        line_height = size + 2
+        line_height = size + 3
         if len(candidate_lines) * line_height <= available_bottom - available_top:
             body_font = candidate_font
             lines = candidate_lines
             break
     if not lines:
-        body_font = font(9, True)
+        body_font = font(10, True)
         lines = []
         for part in parts:
             lines.extend(wrap_part(part, body_font, max_width))
 
-    line_height = body_font.size + 2
+    line_height = body_font.size + 3
     total_height = len(lines) * line_height
     y = available_top + max(0, (available_bottom - available_top - total_height) // 2)
     for line in lines:
-        bbox = d.textbbox((0, 0), line, font=body_font)
         text_width = d.textlength(line, font=body_font)
         x = (W - text_width) / 2
         d.text((x, y), line, fill=BLACK, font=body_font)
