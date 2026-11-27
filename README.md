@@ -16,9 +16,11 @@ Every day the GitHub Action:
 
 The bottom section rotates among three content types:
 
-- **Trivia** — a trivia question with its answer.
-- **Quote** — a motivational quote.
+- **Fun Fact** — a trivia question with its answer.
+- **Motivation** — a motivational quote.
 - **Joke** — a kid-friendly joke.
+
+All three categories use the same centered heading and content layout.
 
 The generator selects the content type and entry based on the date, so the same date produces the same content.
 
@@ -38,7 +40,7 @@ That URL is suitable for PicPak's `push_image` once the repository is public and
 
 ## Important
 
-The workflow generates and publishes the image, but does **not** automatically push it into PicPak. PicPak's ChatGPT tool accepts a public image URL, but a standalone PicPak API endpoint/credential suitable for GitHub Actions has not been established.
+The workflow generates and publishes the image, but does **not** automatically push it into PicPak. The image must currently be added to the PicPak My Agent queue separately. No supported public API for sending a generated image from GitHub Actions has been documented or configured.
 
 ## Local test
 
