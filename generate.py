@@ -157,16 +157,17 @@ def draw_card(forecast, mode, content):
     rows = [("Morning", "morning", 72), ("Noon", "noon", 123), ("Night", "night", 174)]
     for label, key, y in rows:
         p = forecast[key]
-        weather_icon(d, 35, y+14, icon_kind(key, p["short"]), 0.65)
+        # Shift the icon inward and the temperature column toward center.
+        weather_icon(d, 52, y+14, icon_kind(key, p["short"]), 0.65)
 
         lf = font(20, True)
         sf = fit_text(d, p["short"], 175, 13, False, 10)
-        d.text((92, y), f"{label}:", fill=BLACK, font=lf)
-        d.text((68, y+23), p["short"], fill=BLACK, font=sf)
+        d.text((108, y), f"{label}:", fill=BLACK, font=lf)
+        d.text((80, y+23), p["short"], fill=BLACK, font=sf)
 
         tf = fit_text(d, f'{p["temp"]}°{p["unit"]}', 90, 28, True, 20)
         tb = d.textbbox((0, 0), f'{p["temp"]}°{p["unit"]}', font=tf)
-        d.text((368-(tb[2]-tb[0]), y+5), f'{p["temp"]}°{p["unit"]}', fill=BLACK, font=tf)
+        d.text((345-(tb[2]-tb[0]), y+5), f'{p["temp"]}°{p["unit"]}', fill=BLACK, font=tf)
 
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
