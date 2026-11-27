@@ -1,12 +1,11 @@
-name: Daily PicPak Weather
-
 on:
+  push:
+    paths-ignore:
+      - 'docs/**'
   schedule:
-    # GitHub cron is UTC. Run at both possible Pacific-midnight times;
-    # the local-time guard below allows only the one that is midnight.
-    - cron: "5 7,8 * * *"
+    - cron: "5 0 * * *"
+      timezone: "America/Los_Angeles"
   workflow_dispatch:
-
 permissions:
   contents: write
   pages: write
