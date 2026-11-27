@@ -7,17 +7,22 @@ Generates a 400×300 PNG for a PicPak frame.
 Every day the GitHub Action:
 
 1. Gets Alameda, California hourly weather from the National Weather Service API.
-2. Creates morning/noon/night rows with weather icons.
-3. Alternates between a daily trivia question with its answer and a motivational quote.
+2. Creates morning/noon/night weather rows with weather information.
+3. Selects one item from the daily fun-content pools: a trivia question, motivational quote, or kid-friendly joke.
 4. Saves the result as `docs/weather.png`.
 5. Commits the updated image so GitHub Pages can publish it.
 
 ## Daily content
 
-- Even-numbered days: trivia question and answer.
-- Odd-numbered days: motivational quote.
+The bottom section rotates among three content types:
 
-The trivia pool currently contains 50 Q&A entries. The selected entry rotates by date through the collection.
+- **Trivia** — a trivia question with its answer.
+- **Quote** — a motivational quote.
+- **Joke** — a kid-friendly joke.
+
+The generator selects the content type and entry based on the date, so the same date produces the same content.
+
+The content pools currently contain 500 trivia entries, 500 quotes, and 500 jokes.
 
 ## GitHub Pages
 
@@ -46,4 +51,4 @@ The result is `docs/weather.png`.
 
 ## Time
 
-GitHub Actions schedules use UTC. The included schedule targets approximately 7 AM Pacific Standard Time. During daylight saving time, change `15:00 UTC` to `14:00 UTC`.
+The generator uses Pacific time for the date and daily content selection. The GitHub Actions schedule runs around Pacific midnight.
