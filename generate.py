@@ -148,7 +148,7 @@ def draw_card(forecast, mode, content):
     # Header
     from zoneinfo import ZoneInfo
     now = datetime.now(ZoneInfo("America/Los_Angeles"))
-    date_text = now.strftime("%A %m/%d/%y")
+    date_text = now.strftime("%A    %m/%d/%y")
     f = fit_text(d, date_text, 370, 31, True, 22)
     box = d.textbbox((0, 0), date_text, font=f)
     d.text(((W-(box[2]-box[0]))/2, 8), date_text, fill=BLACK, font=f)
