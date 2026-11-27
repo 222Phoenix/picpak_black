@@ -44,12 +44,33 @@ jobs:
         if: steps.localtime.outputs.run == 'true'
         run: python generate.py
 
-      - name: Publish image
+      - name: Create uniquely named image and latest pointer
+        if: steps.localtime.outputs.run == 'true'
+        id: publishinfo
+        run: |
+          DATE="$(TZ=America/Los_Angeles date +%F)"
+          VERSION="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          FILE="weather-${DATE}-${VERSION}.png"
+          cp docs/weather.png "docs/$FILE"
+          URL="https://222phoenix.github.io/picpak_black/$FILE"
+          printf '{\n  "date": "%s",\n  "image": "%s"\n}\n' "$DATE" "$URL" > docs/latest.json
+          echo "image_url=$URL" >> "$GITHUB_OUTPUT"
+          {
+            echo "## PicPak image"
+            echo ""
+            echo "Use this unique URL when adding the image to PicPak:"
+            echo ""
+            echo "$URL"
+            echo ""
+            echo "The URL changes on every workflow run to avoid stale cached images."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit generated images
         if: steps.localtime.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/weather.png
+          git add docs/weather.png docs/weather-*.png docs/latest.json
           git diff --cached --quiet || git commit -m "Update daily weather card"
           git push
 
