@@ -17,18 +17,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install Pillow
         run: pip install Pillow
-
       - name: Generate today's card
         run: python generate.py
-
       - name: Create uniquely named image and latest pointer
         id: publishinfo
         run: |
@@ -48,7 +44,9 @@ jobs:
             echo ""
             echo "The URL changes on every workflow run to avoid stale cached images."
           } >> "$GITHUB_STEP_SUMMARY"
-
+      - name: Remove generated images older than 30 days
+        run: |
+          find docs -maxdepth 1 -type f -name 'weather-*.png' -mtime +30 -print -delete
       - name: Commit generated images
         run: |
           git config user.name "github-actions[bot]"
@@ -66,15 +64,12 @@ jobs:
     steps:
       - name: Checkout updated image
         uses: actions/checkout@v4
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Upload image artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
