@@ -3,7 +3,7 @@
 Generate a 400x300 PicPak weather card for Alameda, CA.
 
 Uses the U.S. National Weather Service API (no API key required).
-Cycles through a quote, fun fact, and kid-friendly joke based on the
+Cycles through a quote and kid-friendly joke based on the
 calendar day. The bottom section shows one item at a time.
 """
 
@@ -76,7 +76,7 @@ def load_content():
     data = json.loads((ROOT / "data" / "content.json").read_text())
     from zoneinfo import ZoneInfo
     today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
-    modes = ["quote", "trivia", "joke"]
+    modes = ["quote", "joke"]
     mode = modes[today.toordinal() % len(modes)]
     items = data[mode]
     # Deterministic rotation through the selected collection, using Alameda's date.
@@ -205,9 +205,7 @@ def draw_card(forecast, mode, content):
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
     # All content types share the same centered body layout and typography.
-    if mode == "trivia":
-        parts = [content["question"], content["answer"]]
-    elif mode == "joke":
+    if mode == "joke":
         parts = [content["text"], content["answer"]]
     else:
         parts = [content["text"]]
