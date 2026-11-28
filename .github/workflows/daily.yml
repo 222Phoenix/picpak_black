@@ -4,7 +4,7 @@ on:
       - 'docs/**'
   schedule:
     # Run at 00:05 Pacific every day. GitHub cron is UTC, so cover
-    # both PST and PDT, then only generate during local hour 00.
+    # both PST and PDT.
     - cron: "5 7,8 * * *"
   workflow_dispatch:
 permissions:
@@ -25,13 +25,7 @@ jobs:
       - name: Install Pillow
         run: pip install Pillow
       - name: Generate today's card
-        run: |
-          HOUR="$(TZ=America/Los_Angeles date +%H)"
-          if [ "$HOUR" != "00" ]; then
-            echo "Not the Pacific midnight run; skipping."
-            exit 0
-          fi
-          python generate.py
+        run: python generate.py
       - name: Create uniquely named image and latest pointer
         id: publishinfo
         run: |
