@@ -148,36 +148,37 @@ def draw_card(forecast, mode, content):
     # Header
     from zoneinfo import ZoneInfo
     now = datetime.now(ZoneInfo("America/Los_Angeles"))
-    date_text = now.strftime("%A    %m/%d/%y")
+    date_text = now.strftime("%A  %m/%d/%y")
     f = fit_text(d, date_text, 370, 31, True, 22)
     box = d.textbbox((0, 0), date_text, font=f)
     d.text(((W-(box[2]-box[0]))/2, 8), date_text, fill=BLACK, font=f)
     d.line((8, 54, 392, 54), fill=BLACK, width=3)
 
-    # Three equal vertical forecast cards beneath the date header.
+    # Three equal forecast columns, defined by two vertical divider lines.
+    # The dividers connect the header and lower horizontal rules to form the
+    # three boxes without separate rounded rectangles.
     columns = [
-        ("Morning", "morning", 8, 128),
+        ("Morning", "morning", 8, 136),
         ("Noon", "noon", 136, 264),
-        ("Night", "night", 272, 392),
+        ("Night", "night", 264, 392),
     ]
     for label, key, left, right in columns:
         p = forecast[key]
         cx = (left + right) // 2
-        d.rounded_rectangle((left, 62, right, 216), radius=7, outline=BLACK, width=2)
 
         # Period label
         lf = fit_text(d, label, right-left-12, 15, True, 11)
         lb = d.textbbox((0, 0), label, font=lf)
-        d.text((cx-(lb[2]-lb[0])/2, 68), label, fill=BLACK, font=lf)
+        d.text((cx-(lb[2]-lb[0])/2, 61), label, fill=BLACK, font=lf)
 
         # Weather icon centered in its own column
-        weather_icon(d, cx, 116, icon_kind(key, p["short"]), 0.82)
+        weather_icon(d, cx, 109, icon_kind(key, p["short"]), 0.82)
 
         # Prominent centered temperature
         temp_text = f'{p["temp"]}°{p["unit"]}'
         tf = fit_text(d, temp_text, right-left-12, 25, True, 17)
         tb = d.textbbox((0, 0), temp_text, font=tf)
-        d.text((cx-(tb[2]-tb[0])/2, 148), temp_text, fill=BLACK, font=tf)
+        d.text((cx-(tb[2]-tb[0])/2, 142), temp_text, fill=BLACK, font=tf)
 
         # Center and wrap the condition within the card width.
         sf = fit_text(d, p["short"], right-left-14, 11, False, 9)
@@ -196,8 +197,11 @@ def draw_card(forecast, mode, content):
             desc_lines.append(line)
         for i, desc in enumerate(desc_lines[:2]):
             dw = d.textlength(desc, font=sf)
-            d.text((cx-dw/2, 181+i*13), desc, fill=BLACK, font=sf)
+            d.text((cx-dw/2, 175+i*13), desc, fill=BLACK, font=sf)
 
+    # Two dividers connect the header and lower horizontal rules.
+    d.line((136, 54, 136, 222), fill=BLACK, width=2)
+    d.line((264, 54, 264, 222), fill=BLACK, width=2)
     d.line((8, 222, 392, 222), fill=BLACK, width=3)
 
     # All content types share the same centered body layout and typography.
@@ -240,9 +244,9 @@ def draw_card(forecast, mode, content):
 
     available_top, available_bottom = 228, 297
     max_width = 372
-    body_font = font(20, True)
+    body_font = font(22, True)
     lines = []
-    for size in range(20, 9, -1):
+    for size in range(22, 9, -1):
         candidate_font = font(size, True)
         candidate_lines = []
         for part in parts:
